@@ -8,7 +8,7 @@ on:
       - closed
 
 jobs:
-  create-pull-request:
+  createPullRequest:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
 
@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Create pull request from hotfix.1 to test"
@@ -25,7 +25,7 @@ jobs:
           body: |
             This pull request merges changes from the hotfix.1 branch into the test branch.
             Please review the changes and approve if everything looks good.
-          branch: hotfix.1
+          branch: hotfix/hotfix1
           base: test
           labels: hotfix, needs-review
           assignees: ${{ github.actor }}

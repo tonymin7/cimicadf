@@ -1,33 +1,32 @@
-name: Create Pull Request from hotfix.1 to test
+name: Sync Hotfix to Dev
 
 on:
-  workflow_dispatch:
-  # pull_request:
-  #   branches:
-  #     - main
-  #   types:
-  #     - closed
-
-
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
 
 jobs:
-  createPullRequest:
+  sync-hotfix-to-dev:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'hotfix/')
     runs-on: ubuntu-latest
-    # if: github.event.pull_request.merged == true
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Create pull request from hotfix.1 to test"
-          title: "Hotfix: Merge hotfix.1 into test"
-          body: |
-            This pull request merges changes from the hotfix.1 branch into the test branch.
-            Please review the changes and approve if everything looks good.
-          branch: hotfix/hotfix1
-          base: test
-          labels: hotfix, needs-review
+          fetch-depth: 0  # Fetch all history for proper branch merging
+
+      - name: Set up Git
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+
+      - name: Merge main into dev
+        run: |
+          git checkout dev
+          git merge main --no-edit
+          git push origin dev
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

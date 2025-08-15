@@ -1,7 +1,7 @@
 name: Create Pull Request from hotfix.1 to test
 
 on:
-  workflow_dispatch: manual run
+  workflow_dispatch:
   # pull_request:
   #   branches:
   #     - main

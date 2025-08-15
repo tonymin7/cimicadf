@@ -1,38 +1,32 @@
-# name: Release Hotfix to Test and Dev
+name: Create Pull Request from hotfix.1 to test
 
-# on:
-#   pull_request:
-#     types: [closed]
-#     branches:
-#       - main
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
 
-# permissions:
-#   contents: write      # Needed for pushing branches and creating PRs
-#   pull-requests: write # Needed for creating, approving, and merging PRs
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
 
-# jobs:
-#   release:
-#     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'hotfix/')
-#     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
-#         with:
-#           fetch-depth: 0
-
-#       - name: Set up Git
-#         run: |
-#           git config --global user.name "GitHub Action"
-#           git config --global user.email "action@github.com"
-
-#       - name: Create PR for test branch
-#         id: create-pr-test
-#         uses: peter-evans/create-pull-request@v7
-#         with:
-#           token: ${{ secrets.GITHUB_TOKEN }}
-#           branch: hotfix/hotfix1
-#           base: test
-#           title: "Merge hotfix from main to test"
-#           body: "Automated PR to merge hotfix changes from main to test"
-#           commit-message: "Merge hotfix from main to test"
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Create pull request from hotfix.1 to test"
+          title: "Hotfix: Merge hotfix.1 into test"
+          body: |
+            This pull request merges changes from the hotfix.1 branch into the test branch.
+            Please review the changes and approve if everything looks good.
+          branch: hotfix.1
+          base: test
+          labels: hotfix, needs-review
+          assignees: ${{ github.actor }}
+          reviewers: ${{ github.actor }}

@@ -1,0 +1,15 @@
+{
+	"name": "adf-cimicgittest",
+	"location": "australiaeast",
+	"identity": {
+		"type": "SystemAssigned,UserAssigned",
+		"principalId": "28e94d4d-b633-421f-b8f3-9ac6f8a7e0ed",
+		"tenantId": "ba43003a-491b-4811-8473-d6fcde34296d",
+		"userAssignedIdentities": {
+			"/subscriptions/6aba5050-d861-4b6d-a2f7-3f5db5562c71/resourcegroups/tony-min/providers/Microsoft.ManagedIdentity/userAssignedIdentities/CIMIC-UAMI": {
+				"clientId": "a3af6e90-4995-4d7a-9c7a-f834bc069162",
+				"principalId": "5d0f2446-5eb5-4767-9582-921d5b4a84e3"
+			}
+		}
+	}
+}

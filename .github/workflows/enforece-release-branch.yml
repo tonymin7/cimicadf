@@ -1,0 +1,17 @@
+name: Enforce Release Branch for Pull Requests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if source branch is a release branch
+        run: |
+          if [[ "${{ github.head_ref }}" != release/* ]]; then
+            echo "Error: Pull requests to main must come from a branch matching 'release/*'."
+            exit 1
+          fi

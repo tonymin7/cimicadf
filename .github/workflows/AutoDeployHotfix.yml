@@ -1,56 +1,38 @@
-name: Release Main to Test and Dev on Hotfix Merge
+name: Release Hotfix to Test and Dev
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - main
 
+permissions:
+  contents: write      # Needed for pushing branches and creating PRs
+  pull-requests: write # Needed for creating, approving, and merging PRs
+
 jobs:
-  release-to-test-and-dev:
+  release:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'hotfix/')
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history to access commit details
-          token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for push permissions
+          fetch-depth: 0
 
-      - name: Check if push is from a hotfix branch merge
-        id: check-hotfix
-        run: |
-          # Get the commit message of the latest push to main
-          COMMIT_SHA=${{ github.sha }}
-          # Find the associated pull request for the commit
-          PR_INFO=$(gh pr list --state merged --base main --limit 1 --json number,headRefName --jq '.[] | select(.headRefName | startswith("hotfix/"))')
-          if [[ -n "$PR_INFO" ]]; then
-            echo "Hotfix PR detected. Proceeding with release to test and dev."
-            echo "is_hotfix=true" >> $GITHUB_OUTPUT
-          else
-            echo "No hotfix PR detected. Skipping release."
-            echo "is_hotfix=false" >> $GITHUB_OUTPUT
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Merge main into test branch
-        if: steps.check-hotfix.outputs.is_hotfix == 'true'
+      - name: Set up Git
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
-          git checkout test
-          git merge main --no-ff --no-edit
-          git push origin test
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Merge main into dev branch
-        if: steps.check-hotfix.outputs.is_hotfix == 'true'
-        run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
-          git checkout dev
-          git merge main --no-ff --no-edit
-          git push origin dev
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create PR for test branch
+        id: create-pr-test
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: hotfix/hotfix1.1
+          base: test
+          title: "Merge hotfix from main to test"
+          body: "Automated PR to merge hotfix changes from main to test"
+          commit-message: "Merge hotfix from main to test"

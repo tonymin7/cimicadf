@@ -1,11 +1,12 @@
 name: Create Pull Request from hotfix.1 to test
 
 on:
-  pull_request:
-    branches:
-      - main
-    types:
-      - closed
+  workflow_dispatch: manual run
+  # pull_request:
+  #   branches:
+  #     - main
+  #   types:
+  #     - closed
 
 jobs:
   createPullRequest:
@@ -25,8 +26,6 @@ jobs:
           body: |
             This pull request merges changes from the hotfix.1 branch into the test branch.
             Please review the changes and approve if everything looks good.
-          branch: hotfix/hotfix1
-          base: test
+          branch: "hotfix/hotfix1"
+          base: main
           labels: hotfix, needs-review
-          assignees: ${{ github.actor }}
-          reviewers: ${{ github.actor }}

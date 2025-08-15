@@ -31,7 +31,7 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: hotfix/hotfix1.1
+          branch: hotfix/hotfix1
           base: test
           title: "Merge hotfix from main to test"
           body: "Automated PR to merge hotfix changes from main to test"

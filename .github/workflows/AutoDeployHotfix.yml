@@ -28,50 +28,11 @@ jobs:
 
       - name: Create PR for test branch
         id: create-pr-test
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: hotfix/hotfix1.1
+          branch: hotfix/hotfix1
           base: test
           title: "Merge hotfix from main to test"
           body: "Automated PR to merge hotfix changes from main to test"
           commit-message: "Merge hotfix from main to test"
-
-      - name: Approve PR for test branch
-        if: steps.create-pr-test.outputs.pull-request-number
-        run: |
-          gh pr review ${{ steps.create-pr-test.outputs.pull-request-number }} --approve -b "Auto-approved by GitHub Actions"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Merge PR for test branch
-        if: steps.create-pr-test.outputs.pull-request-number
-        run: |
-          gh pr merge ${{ steps.create-pr-test.outputs.pull-request-number }} --squash --auto
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create PR for dev branch
-        id: create-pr-dev
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: hotfix-to-dev-${{ github.run_id }}
-          base: dev
-          title: "Merge hotfix from main to dev"
-          body: "Automated PR to merge hotfix changes from main to dev"
-          commit-message: "Merge hotfix from main to dev"
-
-      - name: Approve PR for dev branch
-        if: steps.create-pr-dev.outputs.pull-request-number
-        run: |
-          gh pr review ${{ steps.create-pr-dev.outputs.pull-request-number }} --approve -b "Auto-approved by GitHub Actions"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Merge PR for dev branch
-        if: steps.create-pr-dev.outputs.pull-request-number
-        run: |
-          gh pr merge ${{ steps.create-pr-dev.outputs.pull-request-number }} --squash --auto
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

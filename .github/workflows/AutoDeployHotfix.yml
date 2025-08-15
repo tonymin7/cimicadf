@@ -28,10 +28,10 @@ jobs:
 
       - name: Create PR for test branch
         id: create-pr-test
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: hotfix-to-test-${{ github.run_id }}
+          branch: hotfix/hotfix1.0
           base: test
           title: "Merge hotfix from main to test"
           body: "Automated PR to merge hotfix changes from main to test"

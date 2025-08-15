@@ -29,5 +29,5 @@ jobs:
             This pull request merges changes from the hotfix.1 branch into the test branch.
             Please review the changes and approve if everything looks good.
           branch: hotfix/hotfix1
-          base: main
+          base: test
           labels: hotfix, needs-review

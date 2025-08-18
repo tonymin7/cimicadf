@@ -2,7 +2,7 @@ name: Enforce Release or Hotfix Branch for Pull Requests
 
 on:
   pull_request:
-    types: [closed]
+    types: [opened, synchronize]
     branches:
       - main
       - test

@@ -12,7 +12,7 @@ jobs:
       - name: echo head
         run: |
           echo "${{ github.head_ref }}"
-          echo "${{ github.ref	}}"
+          echo "${{ github.ref_name	}}"
           echo '${{ github.base_ref }}'
           
       - name: Check if source branch is a release or hotfix branch

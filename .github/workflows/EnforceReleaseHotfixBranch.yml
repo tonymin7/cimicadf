@@ -9,6 +9,14 @@ jobs:
   check-branch:
     runs-on: ubuntu-latest
     steps:
+      - name: echo head
+        run: |
+          echo "${{ github.head_ref }}"
+        
+      - name: echo base
+        run: |
+          echo '${{ github.base_ref }}'
+          
       - name: Check if source branch is a release or hotfix branch
         run: |
           SOURCE_BRANCH="${{ github.head_ref }}"

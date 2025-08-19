@@ -1,38 +1,32 @@
-# name: Release Hotfix to Test and Dev
+name: Sync Hotfix to Dev
 
-# on:
-#   pull_request:
-#     types: [closed]
-#     branches:
-#       - main
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
 
-# permissions:
-#   contents: write      # Needed for pushing branches and creating PRs
-#   pull-requests: write # Needed for creating, approving, and merging PRs
+jobs:
+  sync-hotfix-to-dev:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'hotfix/')
+    runs-on: ubuntu-latest
 
-# jobs:
-#   release:
-#     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'hotfix/')
-#     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper branch merging
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
-#         with:
-#           fetch-depth: 0
+      - name: Set up Git
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
 
-#       - name: Set up Git
-#         run: |
-#           git config --global user.name "GitHub Action"
-#           git config --global user.email "action@github.com"
-
-#       - name: Create PR for test branch
-#         id: create-pr-test
-#         uses: peter-evans/create-pull-request@v7
-#         with:
-#           token: ${{ secrets.GITHUB_TOKEN }}
-#           branch: hotfix/hotfix1
-#           base: test
-#           title: "Merge hotfix from main to test"
-#           body: "Automated PR to merge hotfix changes from main to test"
-#           commit-message: "Merge hotfix from main to test"
+      - name: Merge main into dev
+        run: |
+          git checkout dev
+          git merge main --no-edit
+          git push origin dev
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

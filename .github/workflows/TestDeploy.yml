@@ -1,19 +1,10 @@
 on:
-  pull_request_review:
-    branches: test
-    types: [submitted]
-
-# jobs:
-#   approved:
-#     if: github.event.review.state == 'approved'
-
-# on:
-#   # workflow_dispatch: changed to manual
-#   pull_request:
-#     branches:
-#     - test
-#     types:
-#     - closed
+  # workflow_dispatch: changed to manual
+  pull_request:
+    branches:
+    - test
+    types:
+    - closed
 
 permissions:
       id-token: write
@@ -21,7 +12,6 @@ permissions:
 
 jobs:
   build:
-    if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
     environment: test
     steps:

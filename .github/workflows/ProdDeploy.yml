@@ -11,6 +11,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # environment: dev
     steps:
     - uses: actions/checkout@v3
     
@@ -26,12 +27,12 @@ jobs:
         
 # Validates all of the Data Factory resources in the repository. You'll get the same validation errors as when "Validate All" is selected.
     - name: Validate
-      run: npm run build validate ${{github.workspace}}/ADFROOT/ /subscriptions/6aba5050-d861-4b6d-a2f7-3f5db5562c71/resourceGroups/tony-min/providers/Microsoft.DataFactory/factories/adf-cimicgittest-prod # (2) The validate command needs the root folder location of your repository where all the objects are stored. And the 2nd parameter is the resourceID of the ADF instance 
+      run: npm run build validate ${{github.workspace}}/ADFROOT/ /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/tony-min/providers/Microsoft.DataFactory/factories/$VAR_ADF_NAME # (2) The validate command needs the root folder location of your repository where all the objects are stored. And the 2nd parameter is the resourceID of the ADF instance 
       working-directory: ${{github.workspace}}/ADFROOT/build
  
 
     - name: Validate and Generate ARM template
-      run: npm run build export ${{github.workspace}}/ADFROOT/ /subscriptions/6aba5050-d861-4b6d-a2f7-3f5db5562c71/resourceGroups/tony-min/providers/Microsoft.DataFactory/factories/adf-cimicgittest-prod "ExportedArmTemplate"  # (3) The build command, as validate, needs the root folder location of your repository where all the objects are stored. And the 2nd parameter is the resourceID of the ADF instance. The 3rd parameter is the exported ARM template artifact name 
+      run: npm run build export ${{github.workspace}}/ADFROOT/ /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/tony-min/providers/Microsoft.DataFactory/factories/$VAR_ADF_NAME "ExportedArmTemplate"  # (3) The build command, as validate, needs the root folder location of your repository where all the objects are stored. And the 2nd parameter is the resourceID of the ADF instance. The 3rd parameter is the exported ARM template artifact name 
       working-directory: ${{github.workspace}}/ADFROOT/build
  
 # In order to leverage the artifact in another job, we need to upload it with the upload action 
@@ -44,6 +45,7 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
+    # environment: dev  # Specify the dev environment
     steps:
     
       - uses: actions/checkout@v3

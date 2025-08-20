@@ -1,0 +1,46 @@
+name: 'Check Feature Branch Base'
+
+on:
+  create:
+    branch:
+      - 'feature/**'
+
+jobs:
+  check-branch-source:
+    # We only want to run this job for newly created feature branches
+    if: github.event.ref_type == 'branch' && startsWith(github.ref_name, 'feature/')
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v4
+        with:
+          # Fetch all history for all branches and tags
+          # This is necessary to find the common ancestor commit
+          fetch-depth: 0
+
+      - name: 'Verify Base Branch'
+        run: |
+          # The newly created feature branch
+          FEATURE_BRANCH="origin/${{ github.ref_name }}"
+          # The required base branch
+          BASE_BRANCH="origin/dev"
+
+          echo "Verifying that branch '${{ github.ref_name }}' was created from 'dev'..."
+
+          # Get the latest commit hash from the dev branch
+          BASE_HEAD_SHA=$(git rev-parse "$BASE_BRANCH")
+          echo "Latest commit on 'dev' is: $BASE_HEAD_SHA"
+
+          # Find the common ancestor commit between the two branches
+          MERGE_BASE_SHA=$(git merge-base "$BASE_BRANCH" "$FEATURE_BRANCH")
+          echo "Common ancestor commit is: $MERGE_BASE_SHA"
+
+          # Compare the two commit hashes
+          if [ "$BASE_HEAD_SHA" = "$MERGE_BASE_SHA" ]; then
+            echo "✅ Success! Branch '${{ github.ref_name }}' was correctly created from the tip of 'dev'."
+          else
+            echo "❌ Error! Branch '${{ github.ref_name }}' was not created from 'dev'."
+            echo "Please delete this branch and create a new one from the latest commit on 'dev'."
+            exit 1
+          fi

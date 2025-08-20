@@ -5,27 +5,10 @@ on:
     types: [opened, closed, synchronize]
     branches: ["main", "test"]
 
-# on:
-#   pull_request:
-#     branches:
-#       - main
-#       - test
-#       # - dev
-      
 jobs:
   check-branch:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-        
-      - name: echo head
-        run: |
-          echo "${{ github.head_ref }}"
-          echo "${{ github.ref_name	}}"
-          echo '${{ github.base_ref }}'
           
       - name: Check if source branch is a release or hotfix branch
         run: |

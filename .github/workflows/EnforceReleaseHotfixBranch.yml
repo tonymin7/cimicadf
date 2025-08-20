@@ -5,6 +5,13 @@ on:
     types: [opened, closed, synchronize]
     branches: ["main", "test"]
 
+# on:
+#   pull_request:
+#     branches:
+#       - main
+#       - test
+#       # - dev
+      
 jobs:
   check-branch:
     runs-on: ubuntu-latest

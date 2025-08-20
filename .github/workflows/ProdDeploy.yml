@@ -75,6 +75,6 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: tony-min 
           template: ARMTemplateForFactory.json 
-          parameters: ADFROOT/parameters/${{ vars.parameter }}
+          parameters: ADFROOT/parameters/${{ vars.VAR_PARAMETERS }}
           deploymentMode: incremental
           # skipAzModuleInstallation:  # Parameters which skip the Az module installation. Optional, default is false.      

@@ -4,7 +4,7 @@
 		"activities": [
 			{
 				"name": "Set variable1",
-				"description": "unit testing",
+				"description": "unit testing for non-release branch",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"policy": {

@@ -2,7 +2,7 @@ on:
   # workflow_dispatch: changed to manual
   push:
     branches:
-    - main
+    - test
 
 permissions:
       id-token: write
@@ -11,7 +11,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: main
+    environment: test
     steps:
     - uses: actions/checkout@v3
     
@@ -51,7 +51,7 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    environment: main 
+    environment: test 
     steps:
     
       - uses: actions/checkout@v3

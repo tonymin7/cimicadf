@@ -1,14 +1,14 @@
 name: Enforce Release or Hotfix Branch for Pull Requests
 
-on:
-  pull_request:
-    types: [opened, closed, synchronize]
-    branches: ["main", "test"]
-
 # on:
 #   pull_request:
-#     branches:
-#       - dev
+#     types: [opened, closed, synchronize]
+#     branches: ["main", "test"]
+
+on:
+  pull_request:
+    branches:
+      - dev
       
 jobs:
   check-branch:

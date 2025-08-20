@@ -2,7 +2,7 @@ on:
   # workflow_dispatch: changed to manual
   push:
     branches:
-    - main
+    - dev
 
 permissions:
       id-token: write

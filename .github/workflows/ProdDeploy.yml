@@ -30,7 +30,7 @@ jobs:
       run: |
         npm run build validate \
         ${{github.workspace}}/ADFROOT/ \
-        /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/tony-min/providers/Microsoft.DataFactory/factories/${{ vars.VAR_ADF_NAME }} 
+        /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ VAR_RG }}/providers/Microsoft.DataFactory/factories/${{ vars.VAR_ADF_NAME }} 
       working-directory: ${{github.workspace}}/ADFROOT/build
  
 
@@ -38,7 +38,7 @@ jobs:
       run: |
         npm run build export \
         ${{github.workspace}}/ADFROOT/ \
-        /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/tony-min/providers/Microsoft.DataFactory/factories/${{ vars.VAR_ADF_NAME }} "ExportedArmTemplate"  
+        /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ VAR_RG }}/providers/Microsoft.DataFactory/factories/${{ vars.VAR_ADF_NAME }} "ExportedArmTemplate"  
       working-directory: ${{github.workspace}}/ADFROOT/build
  
 # In order to leverage the artifact in another job, we need to upload it with the upload action 
@@ -73,7 +73,7 @@ jobs:
         uses: Azure/arm-deploy@v2
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: tony-min 
+          resourceGroupName: ${{ VAR_RG }} 
           template: ARMTemplateForFactory.json 
           parameters: ADFROOT/parameters/${{ vars.VAR_PARAMETERS }}
           deploymentMode: incremental
